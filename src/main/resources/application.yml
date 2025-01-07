@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: SpringSecurityFreeDemo
+  security:
+    user:
+      name: abel
+      password: pass
+  datasource:
+    url: jdbc:postgresql://localhost:5432/security_free_demo
+    username: postgres
+    password: 9041
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+#spring.application.name=SpringSecurityFreeDemo
+#spring.security.user.name=abel
+#spring.security.user.password=pass
