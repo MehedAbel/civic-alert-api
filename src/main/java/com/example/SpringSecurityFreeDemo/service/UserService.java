@@ -1,13 +1,23 @@
 package com.example.SpringSecurityFreeDemo.service;
 
+import com.example.SpringSecurityFreeDemo.dto.LoginDto;
+import com.example.SpringSecurityFreeDemo.dto.LoginResponseDto;
+import com.example.SpringSecurityFreeDemo.dto.RegisterDto;
+import com.example.SpringSecurityFreeDemo.dto.RegisterResponseDto;
+import com.example.SpringSecurityFreeDemo.exception.InvalidLoginCredentialsException;
+import com.example.SpringSecurityFreeDemo.exception.InvalidRegisterCredentialsException;
+import com.example.SpringSecurityFreeDemo.exception.UserAlreadyExistsException;
 import com.example.SpringSecurityFreeDemo.model.Users;
 import com.example.SpringSecurityFreeDemo.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.sql.Ref;
 
 @Service
 public class UserService {
@@ -21,18 +31,106 @@ public class UserService {
     @Autowired
     AuthenticationManager authManager;
 
-    public Users register(Users user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        return repo.save(user);
-    }
+    public RegisterResponseDto register(RegisterDto dto) {
+        validateRegisterRequest(dto);
 
-    public String verify(Users user) {
-        Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-
-        if (auth.isAuthenticated()) {
-            return jwtService.generateToken(user.getUsername());
+        if (repo.existsByEmail(dto.getEmail())) {
+            throw new UserAlreadyExistsException("Email already in use by another user");
         }
 
-        return "Failure at login";
+        Users user = mapRegisterDtoToUser(dto);
+
+        user.setPassword(encoder.encode(user.getPassword()));
+        return mapToRegisterResponseDto(repo.save(user));
+    }
+
+    private void validateRegisterRequest(RegisterDto dto) {
+        String nameRegex = "^[a-zA-Zà-žÀ-Ž-]{2,50}$";
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$";
+
+        if (!(
+                dto.getFirstName().matches(nameRegex) &&
+                dto.getLastName().matches(nameRegex) &&
+                dto.getEmail().matches(emailRegex) &&
+                dto.getPassword().matches(passwordRegex)))
+        {
+            throw new InvalidRegisterCredentialsException("Invalid user registration credentials format");
+        }
+    }
+
+    public LoginResponseDto login(LoginDto loginUser) {
+        Users user = validateLoginRequest(loginUser);
+
+        Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPassword()));
+
+        if (!auth.isAuthenticated()) {
+            throw new InvalidLoginCredentialsException("Invalid email or password");
+        }
+
+        LoginResponseDto loginResponseDto = mapToLoginResponseDto(user, jwtService.generateToken(user.getUsername()));
+
+        return loginResponseDto;
+    }
+
+    private Users validateLoginRequest(LoginDto loginDto) {
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$";
+
+        if (!(loginDto.getEmail().matches(emailRegex) && loginDto.getPassword().matches(passwordRegex))) {
+            throw new InvalidLoginCredentialsException("Invalid email or password");
+        }
+
+        Users user = repo.findByEmail(loginDto.getEmail());
+
+        if (user == null) {
+            throw new InvalidLoginCredentialsException("Invalid email or password");
+        }
+
+        Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+
+        if (!auth.isAuthenticated()) {
+            throw new InvalidLoginCredentialsException("Invalid email or password");
+        }
+
+        return user;
+    }
+
+    private RegisterResponseDto mapToRegisterResponseDto(Users user) {
+        RegisterResponseDto dto = new RegisterResponseDto();
+        dto.setEmail(user.getEmail());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+
+        return dto;
+    }
+
+    private Users mapRegisterDtoToUser(RegisterDto dto) {
+        Users user = new Users();
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+
+        return user;
+    }
+
+    private LoginResponseDto mapToLoginResponseDto(Users user, String accessToken) {
+        LoginResponseDto dto = new LoginResponseDto();
+
+        dto.setEmail(user.getEmail());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setJwtAccessToken(accessToken);
+
+        return dto;
+    }
+
+    private Users mapLoginDtoToUser(LoginDto dto) {
+        Users user = new Users();
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+
+        return user;
     }
 }

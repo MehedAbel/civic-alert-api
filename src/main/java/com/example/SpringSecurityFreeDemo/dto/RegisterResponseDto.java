@@ -1,20 +1,17 @@
 package com.example.SpringSecurityFreeDemo.dto;
 
-public class RegisterDto {
-
+public class RegisterResponseDto {
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
 
-    public RegisterDto(String firstName, String lastName, String email, String password) {
+    public RegisterResponseDto(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
     }
 
-    public RegisterDto() {
+    public RegisterResponseDto() {
     }
 
     public String getFirstName() {
@@ -39,13 +36,5 @@ public class RegisterDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

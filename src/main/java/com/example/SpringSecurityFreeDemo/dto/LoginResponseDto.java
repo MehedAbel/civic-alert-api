@@ -1,20 +1,19 @@
 package com.example.SpringSecurityFreeDemo.dto;
 
-public class RegisterDto {
-
+public class LoginResponseDto {
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
+    private String jwtAccessToken;
 
-    public RegisterDto(String firstName, String lastName, String email, String password) {
+    public LoginResponseDto(String firstName, String lastName, String email, String jwtAccessToken) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
+        this.jwtAccessToken = jwtAccessToken;
     }
 
-    public RegisterDto() {
+    public LoginResponseDto() {
     }
 
     public String getFirstName() {
@@ -41,11 +40,11 @@ public class RegisterDto {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getJwtAccessToken() {
+        return jwtAccessToken;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setJwtAccessToken(String jwtAccessToken) {
+        this.jwtAccessToken = jwtAccessToken;
     }
 }
