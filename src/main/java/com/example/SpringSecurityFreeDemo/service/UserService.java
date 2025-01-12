@@ -34,13 +34,9 @@ public class UserService {
     public RegisterResponseDto register(RegisterDto dto) {
         validateRegisterRequest(dto);
 
-        if (repo.existsByEmail(dto.getEmail())) {
-            throw new UserAlreadyExistsException("Email already in use by another user");
-        }
-
         Users user = mapRegisterDtoToUser(dto);
-
         user.setPassword(encoder.encode(user.getPassword()));
+
         return mapToRegisterResponseDto(repo.save(user));
     }
 
@@ -57,16 +53,14 @@ public class UserService {
         {
             throw new InvalidRegisterCredentialsException("Invalid user registration credentials format");
         }
+
+        if (repo.existsByEmail(dto.getEmail())) {
+            throw new UserAlreadyExistsException("Email already in use by another user");
+        }
     }
 
     public LoginResponseDto login(LoginDto loginUser) {
         Users user = validateLoginRequest(loginUser);
-
-        Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPassword()));
-
-        if (!auth.isAuthenticated()) {
-            throw new InvalidLoginCredentialsException("Invalid email or password");
-        }
 
         LoginResponseDto loginResponseDto = mapToLoginResponseDto(user, jwtService.generateToken(user.getUsername()));
 
@@ -87,9 +81,9 @@ public class UserService {
             throw new InvalidLoginCredentialsException("Invalid email or password");
         }
 
-        Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-
-        if (!auth.isAuthenticated()) {
+        try {
+            Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+        } catch (Exception e) {
             throw new InvalidLoginCredentialsException("Invalid email or password");
         }
 
