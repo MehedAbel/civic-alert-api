@@ -115,7 +115,7 @@ public class UserService {
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
-        dto.setJwtAccessToken(accessToken);
+        dto.setAccessToken(accessToken);
 
         return dto;
     }

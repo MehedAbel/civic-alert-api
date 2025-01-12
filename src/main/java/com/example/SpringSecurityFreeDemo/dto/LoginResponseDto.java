@@ -4,13 +4,13 @@ public class LoginResponseDto {
     private String firstName;
     private String lastName;
     private String email;
-    private String jwtAccessToken;
+    private String accessToken;
 
-    public LoginResponseDto(String firstName, String lastName, String email, String jwtAccessToken) {
+    public LoginResponseDto(String firstName, String lastName, String email, String accessToken) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.jwtAccessToken = jwtAccessToken;
+        this.accessToken = accessToken;
     }
 
     public LoginResponseDto() {
@@ -40,11 +40,11 @@ public class LoginResponseDto {
         this.email = email;
     }
 
-    public String getJwtAccessToken() {
-        return jwtAccessToken;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setJwtAccessToken(String jwtAccessToken) {
-        this.jwtAccessToken = jwtAccessToken;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }
