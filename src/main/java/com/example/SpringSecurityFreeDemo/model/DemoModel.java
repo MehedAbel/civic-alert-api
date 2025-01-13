@@ -1,24 +1,30 @@
 package com.example.SpringSecurityFreeDemo.model;
 
-public class Student {
-    private int id;
-    private String name;
-    private int marks;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-    public Student(int id, String name, int marks) {
+@Entity
+public class DemoModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
+
+    public DemoModel(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.marks = marks;
     }
 
-    public Student() {
+    public DemoModel() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -30,20 +36,11 @@ public class Student {
         this.name = name;
     }
 
-    public int getMarks() {
-        return marks;
-    }
-
-    public void setMarks(int marks) {
-        this.marks = marks;
-    }
-
     @Override
     public String toString() {
-        return "Student{" +
+        return "DemoModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", marks=" + marks +
                 '}';
     }
 }

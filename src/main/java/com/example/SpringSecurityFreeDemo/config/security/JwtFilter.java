@@ -1,7 +1,7 @@
-package com.example.SpringSecurityFreeDemo.config;
+package com.example.SpringSecurityFreeDemo.config.security;
 
-import com.example.SpringSecurityFreeDemo.service.JWTService;
-import com.example.SpringSecurityFreeDemo.service.MyUserDetailsService;
+import com.example.SpringSecurityFreeDemo.service.auth.JwtService;
+import com.example.SpringSecurityFreeDemo.service.user.MyUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     @Autowired
-    private JWTService jwtService;
+    private JwtService jwtService;
 
     @Autowired
     ApplicationContext context;

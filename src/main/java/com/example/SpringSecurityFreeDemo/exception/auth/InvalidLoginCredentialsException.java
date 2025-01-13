@@ -1,4 +1,4 @@
-package com.example.SpringSecurityFreeDemo.exception;
+package com.example.SpringSecurityFreeDemo.exception.auth;
 
 import java.io.Serial;
 

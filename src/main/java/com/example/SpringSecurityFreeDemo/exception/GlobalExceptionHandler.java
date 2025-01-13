@@ -1,9 +1,11 @@
 package com.example.SpringSecurityFreeDemo.exception;
 
+import com.example.SpringSecurityFreeDemo.exception.auth.InvalidLoginCredentialsException;
+import com.example.SpringSecurityFreeDemo.exception.auth.InvalidRegisterCredentialsException;
+import com.example.SpringSecurityFreeDemo.exception.auth.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;

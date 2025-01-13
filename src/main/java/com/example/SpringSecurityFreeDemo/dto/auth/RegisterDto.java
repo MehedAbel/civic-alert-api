@@ -1,4 +1,4 @@
-package com.example.SpringSecurityFreeDemo.dto;
+package com.example.SpringSecurityFreeDemo.dto.auth;
 
 public class RegisterDto {
 

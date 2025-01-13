@@ -1,17 +1,15 @@
-package com.example.SpringSecurityFreeDemo.model;
+package com.example.SpringSecurityFreeDemo.model.user;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Entity
-public class Users implements UserDetails {
+public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -26,10 +24,10 @@ public class Users implements UserDetails {
     @Enumerated
     private Set<Role> roles;
 
-    public Users() {
+    public AppUser() {
     }
 
-    public Users(int id, String firstName, String lastName, String email, String password, Set<Role> roles) {
+    public AppUser(int id, String firstName, String lastName, String email, String password, Set<Role> roles) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

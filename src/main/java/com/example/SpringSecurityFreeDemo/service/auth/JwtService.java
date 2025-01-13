@@ -1,6 +1,6 @@
-package com.example.SpringSecurityFreeDemo.service;
+package com.example.SpringSecurityFreeDemo.service.auth;
 
-import com.example.SpringSecurityFreeDemo.model.Role;
+import com.example.SpringSecurityFreeDemo.model.user.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -15,9 +15,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-public class JWTService {
+public class JwtService {
     private String secretKey = "";
-    public JWTService() {
+
+    public JwtService() {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk = keyGen.generateKey();
@@ -52,8 +53,6 @@ public class JWTService {
     }
 
     public Set<Role> extractRoles(String token) {
-//        return extractClaim(token, claims -> (ArrayList<Role>) claims.get("roles", ArrayList.class));
-
         return extractClaim(token, claims -> {
             List<String> rolesAsStrings = claims.get("roles", List.class);
             if (rolesAsStrings == null) {

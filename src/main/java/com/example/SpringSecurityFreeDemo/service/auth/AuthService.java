@@ -1,45 +1,45 @@
-package com.example.SpringSecurityFreeDemo.service;
+package com.example.SpringSecurityFreeDemo.service.auth;
 
-import com.example.SpringSecurityFreeDemo.dto.LoginDto;
-import com.example.SpringSecurityFreeDemo.dto.LoginResponseDto;
-import com.example.SpringSecurityFreeDemo.dto.RegisterDto;
-import com.example.SpringSecurityFreeDemo.dto.RegisterResponseDto;
-import com.example.SpringSecurityFreeDemo.exception.InvalidLoginCredentialsException;
-import com.example.SpringSecurityFreeDemo.exception.InvalidRegisterCredentialsException;
-import com.example.SpringSecurityFreeDemo.exception.UserAlreadyExistsException;
-import com.example.SpringSecurityFreeDemo.model.Role;
-import com.example.SpringSecurityFreeDemo.model.Users;
-import com.example.SpringSecurityFreeDemo.repo.UserRepo;
+import com.example.SpringSecurityFreeDemo.dto.auth.LoginDto;
+import com.example.SpringSecurityFreeDemo.dto.auth.LoginResponseDto;
+import com.example.SpringSecurityFreeDemo.dto.auth.RegisterDto;
+import com.example.SpringSecurityFreeDemo.dto.auth.RegisterResponseDto;
+import com.example.SpringSecurityFreeDemo.exception.auth.InvalidLoginCredentialsException;
+import com.example.SpringSecurityFreeDemo.exception.auth.InvalidRegisterCredentialsException;
+import com.example.SpringSecurityFreeDemo.exception.auth.UserAlreadyExistsException;
+import com.example.SpringSecurityFreeDemo.model.user.AppUser;
+import com.example.SpringSecurityFreeDemo.model.user.Role;
+import com.example.SpringSecurityFreeDemo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Ref;
 import java.util.Set;
 
 @Service
-public class UserService {
+public class AuthService {
     @Autowired
-    private UserRepo repo;
-    @Autowired
-    private JWTService jwtService;
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    private UserRepository userRepository;
 
     @Autowired
-    AuthenticationManager authManager;
+    private JwtService jwtService;
+
+    @Autowired
+    private AuthenticationManager authManager;
+
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     // REGISTER SERVICE
     public RegisterResponseDto register(RegisterDto dto) {
         validateRegisterRequest(dto);
 
-        Users user = mapRegisterDtoToUser(dto);
+        AppUser user = mapRegisterDtoToUser(dto);
         user.setPassword(encoder.encode(user.getPassword()));
 
-        return mapToRegisterResponseDto(repo.save(user));
+        return mapToRegisterResponseDto(userRepository.save(user));
     }
 
     private void validateRegisterRequest(RegisterDto dto) {
@@ -56,21 +56,21 @@ public class UserService {
             throw new InvalidRegisterCredentialsException("Invalid user registration credentials format");
         }
 
-        if (repo.existsByEmail(dto.getEmail())) {
+        if (userRepository.existsByEmail(dto.getEmail())) {
             throw new UserAlreadyExistsException("Email already in use by another user");
         }
     }
 
     // LOGIN SERVICE
     public LoginResponseDto login(LoginDto loginUser) {
-        Users user = validateLoginRequest(loginUser);
+        AppUser user = validateLoginRequest(loginUser);
 
         LoginResponseDto loginResponseDto = mapToLoginResponseDto(user, jwtService.generateToken(user.getUsername(), user.getRoles()));
 
         return loginResponseDto;
     }
 
-    private Users validateLoginRequest(LoginDto loginDto) {
+    private AppUser validateLoginRequest(LoginDto loginDto) {
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$";
 
@@ -78,7 +78,7 @@ public class UserService {
             throw new InvalidLoginCredentialsException("Invalid email or password");
         }
 
-        Users user = repo.findByEmail(loginDto.getEmail());
+        AppUser user = userRepository.findByEmail(loginDto.getEmail());
 
         if (user == null) {
             throw new InvalidLoginCredentialsException("Invalid email or password");
@@ -93,7 +93,7 @@ public class UserService {
         return user;
     }
 
-    private RegisterResponseDto mapToRegisterResponseDto(Users user) {
+    private RegisterResponseDto mapToRegisterResponseDto(AppUser user) {
         RegisterResponseDto dto = new RegisterResponseDto();
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
@@ -103,8 +103,8 @@ public class UserService {
         return dto;
     }
 
-    private Users mapRegisterDtoToUser(RegisterDto dto) {
-        Users user = new Users();
+    private AppUser mapRegisterDtoToUser(RegisterDto dto) {
+        AppUser user = new AppUser();
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
         user.setFirstName(dto.getFirstName());
@@ -114,7 +114,7 @@ public class UserService {
         return user;
     }
 
-    private LoginResponseDto mapToLoginResponseDto(Users user, String accessToken) {
+    private LoginResponseDto mapToLoginResponseDto(AppUser user, String accessToken) {
         LoginResponseDto dto = new LoginResponseDto();
 
         dto.setEmail(user.getEmail());
