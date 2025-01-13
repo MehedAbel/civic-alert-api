@@ -1,5 +1,6 @@
 package com.example.SpringSecurityFreeDemo.service;
 
+import com.example.SpringSecurityFreeDemo.model.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -8,13 +9,10 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JWTService {
@@ -29,8 +27,9 @@ public class JWTService {
         }
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username, Set<Role> roles) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", roles);
 
         return Jwts.builder()
                 .claims()
@@ -50,6 +49,21 @@ public class JWTService {
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public Set<Role> extractRoles(String token) {
+//        return extractClaim(token, claims -> (ArrayList<Role>) claims.get("roles", ArrayList.class));
+
+        return extractClaim(token, claims -> {
+            List<String> rolesAsStrings = claims.get("roles", List.class);
+            if (rolesAsStrings == null) {
+                return Collections.emptySet();
+            }
+
+            return rolesAsStrings.stream()
+                    .map(Role::valueOf)
+                    .collect(Collectors.toSet());
+        });
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

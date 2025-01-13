@@ -7,6 +7,7 @@ import com.example.SpringSecurityFreeDemo.dto.RegisterResponseDto;
 import com.example.SpringSecurityFreeDemo.exception.InvalidLoginCredentialsException;
 import com.example.SpringSecurityFreeDemo.exception.InvalidRegisterCredentialsException;
 import com.example.SpringSecurityFreeDemo.exception.UserAlreadyExistsException;
+import com.example.SpringSecurityFreeDemo.model.Role;
 import com.example.SpringSecurityFreeDemo.model.Users;
 import com.example.SpringSecurityFreeDemo.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Ref;
+import java.util.Set;
 
 @Service
 public class UserService {
-
     @Autowired
     private UserRepo repo;
     @Autowired
@@ -31,6 +32,7 @@ public class UserService {
     @Autowired
     AuthenticationManager authManager;
 
+    // REGISTER SERVICE
     public RegisterResponseDto register(RegisterDto dto) {
         validateRegisterRequest(dto);
 
@@ -59,10 +61,11 @@ public class UserService {
         }
     }
 
+    // LOGIN SERVICE
     public LoginResponseDto login(LoginDto loginUser) {
         Users user = validateLoginRequest(loginUser);
 
-        LoginResponseDto loginResponseDto = mapToLoginResponseDto(user, jwtService.generateToken(user.getUsername()));
+        LoginResponseDto loginResponseDto = mapToLoginResponseDto(user, jwtService.generateToken(user.getUsername(), user.getRoles()));
 
         return loginResponseDto;
     }
@@ -95,6 +98,7 @@ public class UserService {
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
+        dto.setRoles(user.getRoles());
 
         return dto;
     }
@@ -105,6 +109,7 @@ public class UserService {
         user.setPassword(dto.getPassword());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
+        user.setRoles(Set.of(Role.USER));
 
         return user;
     }
@@ -116,15 +121,8 @@ public class UserService {
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setAccessToken(accessToken);
+        dto.setRoles(user.getRoles());
 
         return dto;
-    }
-
-    private Users mapLoginDtoToUser(LoginDto dto) {
-        Users user = new Users();
-        user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
-
-        return user;
     }
 }
