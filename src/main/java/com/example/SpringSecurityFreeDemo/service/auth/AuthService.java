@@ -65,7 +65,7 @@ public class AuthService {
     public LoginResponseDto login(LoginDto loginUser) {
         AppUser user = validateLoginRequest(loginUser);
 
-        LoginResponseDto loginResponseDto = mapToLoginResponseDto(user, jwtService.generateToken(user.getUsername(), user.getRoles()));
+        LoginResponseDto loginResponseDto = mapToLoginResponseDto(user, jwtService.generateAccessToken(user.getUsername(), user.getRoles()));
 
         return loginResponseDto;
     }
