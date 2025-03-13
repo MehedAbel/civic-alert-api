@@ -45,13 +45,21 @@ public class AuthService {
     private void validateRegisterRequest(RegisterDto dto) {
         String nameRegex = "^[a-zA-Zà-žÀ-Ž-]{2,50}$";
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$";
+//        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$";
+
+//        if (!(
+//                dto.getFirstName().matches(nameRegex) &&
+//                dto.getLastName().matches(nameRegex) &&
+//                dto.getEmail().matches(emailRegex) &&
+//                dto.getPassword().matches(passwordRegex)))
+//        {
+//            throw new InvalidRegisterCredentialsException("Invalid user registration credentials format");
+//        }
 
         if (!(
                 dto.getFirstName().matches(nameRegex) &&
                 dto.getLastName().matches(nameRegex) &&
-                dto.getEmail().matches(emailRegex) &&
-                dto.getPassword().matches(passwordRegex)))
+                dto.getEmail().matches(emailRegex)))
         {
             throw new InvalidRegisterCredentialsException("Invalid user registration credentials format");
         }
@@ -72,9 +80,13 @@ public class AuthService {
 
     private AppUser validateLoginRequest(LoginDto loginDto) {
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$";
+//        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$";
+//
+//        if (!(loginDto.getEmail().matches(emailRegex) && loginDto.getPassword().matches(passwordRegex))) {
+//            throw new InvalidLoginCredentialsException("Invalid email or password");
+//        }
 
-        if (!(loginDto.getEmail().matches(emailRegex) && loginDto.getPassword().matches(passwordRegex))) {
+        if (!(loginDto.getEmail().matches(emailRegex))) {
             throw new InvalidLoginCredentialsException("Invalid email or password");
         }
 
