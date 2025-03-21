@@ -1,6 +1,6 @@
 package com.example.SpringSecurityFreeDemo.model.user;
 
 public enum Role {
-    USER,
+    CLIENT,
     ADMIN
 }

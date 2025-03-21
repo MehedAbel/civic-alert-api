@@ -121,7 +121,7 @@ public class AuthService {
         user.setPassword(dto.getPassword());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
-        user.setRoles(Set.of(Role.USER));
+        user.setRoles(Set.of(Role.CLIENT));
 
         return user;
     }
