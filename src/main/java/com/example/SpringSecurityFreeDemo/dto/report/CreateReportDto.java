@@ -6,15 +6,17 @@ import jakarta.persistence.*;
 public class CreateReportDto {
     private String title;
     private String description;
+    private String category;
     private Double latitude;
     private Double longitude;
 
     public CreateReportDto() {
     }
 
-    public CreateReportDto(String title, String description, Double latitude, Double longitude) {
+    public CreateReportDto(String title, String description, String category, Double latitude, Double longitude) {
         this.title = title;
         this.description = description;
+        this.category = category;
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -33,6 +35,14 @@ public class CreateReportDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public Double getLatitude() {
@@ -56,6 +66,7 @@ public class CreateReportDto {
         return "ReportModel{" +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", category='" + category + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 '}';

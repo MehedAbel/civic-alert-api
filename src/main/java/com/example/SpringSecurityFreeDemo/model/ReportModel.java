@@ -11,6 +11,7 @@ public class ReportModel {
     private Integer id;
     private String title;
     private String description;
+    private String category;
     private Double latitude;
     private Double longitude;
 
@@ -21,10 +22,11 @@ public class ReportModel {
     public ReportModel() {
     }
 
-    public ReportModel(Integer id, String title, String description, Double latitude, Double longitude, AppUser user) {
+    public ReportModel(Integer id, String title, String description, String category, Double latitude, Double longitude, AppUser user) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.category = category;
         this.latitude = latitude;
         this.longitude = longitude;
         this.user = user;
@@ -52,6 +54,14 @@ public class ReportModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public Double getLatitude() {
@@ -84,6 +94,7 @@ public class ReportModel {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", category='" + category + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", user=" + user +

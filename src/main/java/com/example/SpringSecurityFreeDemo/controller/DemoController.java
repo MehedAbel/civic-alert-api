@@ -22,7 +22,7 @@ public class DemoController {
         return new ResponseEntity<>(demoService.createDemo(demoModel), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     @GetMapping
     public ResponseEntity<List<DemoModel>> getDemos() {
         return new ResponseEntity<>(demoService.getDemos(), HttpStatus.OK);
