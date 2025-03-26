@@ -1,12 +1,16 @@
 package com.example.SpringSecurityFreeDemo.service;
 
 import com.example.SpringSecurityFreeDemo.dto.report.CreateReportDto;
+import com.example.SpringSecurityFreeDemo.exception.auth.ReportNotFoundException;
 import com.example.SpringSecurityFreeDemo.model.ReportModel;
 import com.example.SpringSecurityFreeDemo.model.user.AppUser;
 import com.example.SpringSecurityFreeDemo.repository.ReportRepository;
 import com.example.SpringSecurityFreeDemo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
@@ -36,4 +40,32 @@ public class ReportService {
         return reportModel;
     }
 
+    public ReportModel getReport(Integer reportId) {
+        if (!reportRepository.existsById(reportId)) {
+            throw new ReportNotFoundException("Report not found");
+        }
+
+        return reportRepository.findById(reportId).orElseThrow(() -> new RuntimeException("Report not found"));
+    }
+
+    public List<ReportModel> getAllReports() {
+        return reportRepository.findAll();
+    }
+
+    public List<ReportModel> getAllReportsByUsername(String username) {
+        return reportRepository.findAll().stream().filter(r -> r.getUser().getUsername().equals(username)).collect(Collectors.toList());
+    }
+
+    public List<ReportModel> getAllReportsByCategory(String category) {
+        return reportRepository.findAll().stream().filter(r -> r.getCategory().equals(category)).collect(Collectors.toList());
+    }
+
+    public String deleteReport(Integer reportId) {
+        if (!reportRepository.existsById(reportId)) {
+            throw new ReportNotFoundException("Report not found");
+        }
+
+        reportRepository.deleteById(reportId);
+        return "Report deleted successfully";
+    }
 }

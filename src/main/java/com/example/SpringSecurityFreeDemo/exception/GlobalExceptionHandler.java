@@ -2,7 +2,9 @@ package com.example.SpringSecurityFreeDemo.exception;
 
 import com.example.SpringSecurityFreeDemo.exception.auth.InvalidLoginCredentialsException;
 import com.example.SpringSecurityFreeDemo.exception.auth.InvalidRegisterCredentialsException;
+import com.example.SpringSecurityFreeDemo.exception.auth.ReportNotFoundException;
 import com.example.SpringSecurityFreeDemo.exception.auth.UserAlreadyExistsException;
+import jakarta.persistence.ElementCollection;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -52,5 +54,15 @@ public class GlobalExceptionHandler {
         errorObject.setTimestamp(new Date());
 
         return new ResponseEntity<>(errorObject, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ReportNotFoundException.class)
+    public ResponseEntity<ErrorObject> handleReportNotFoundException(ReportNotFoundException ex, WebRequest request) {
+        ErrorObject errorObject = new ErrorObject();
+        errorObject.setMessage(ex.getMessage());
+        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorObject.setTimestamp(new Date());
+
+        return new ResponseEntity<>(errorObject, HttpStatus.NOT_FOUND);
     }
 }

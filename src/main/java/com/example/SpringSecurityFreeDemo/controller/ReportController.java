@@ -12,10 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/report")
@@ -35,4 +34,30 @@ public class ReportController {
 
         return new ResponseEntity<>(reportService.createReport(createReportDto, username), HttpStatus.CREATED);
     }
+
+    @GetMapping("/{reportId}")
+    public ResponseEntity<ReportModel> getReport(@PathVariable Integer reportId) {
+        return new ResponseEntity<>(reportService.getReport(reportId), HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ReportModel>> getAllReports() {
+        return new ResponseEntity<>(reportService.getAllReports(), HttpStatus.OK);
+    }
+
+    @GetMapping("/all-by-username/{username}")
+    public ResponseEntity<List<ReportModel>> getAllReportsByUsername(@PathVariable String username) {
+        return new ResponseEntity<>(reportService.getAllReportsByUsername(username), HttpStatus.OK);
+    }
+
+    @GetMapping("/all-by-category/{category}")
+    public ResponseEntity<List<ReportModel>> getAllReportsByCategory(@PathVariable String category) {
+        return new ResponseEntity<>(reportService.getAllReportsByCategory(category), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{reportId}")
+    public ResponseEntity<String> deleteReport(@PathVariable Integer reportId) {
+        return new ResponseEntity<>(reportService.deleteReport(reportId), HttpStatus.OK);
+    }
+
 }
