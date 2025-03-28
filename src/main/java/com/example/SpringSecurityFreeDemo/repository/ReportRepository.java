@@ -1,7 +1,6 @@
 package com.example.SpringSecurityFreeDemo.repository;
 
-import com.example.SpringSecurityFreeDemo.model.ReportModel;
-import com.example.SpringSecurityFreeDemo.model.user.AppUser;
+import com.example.SpringSecurityFreeDemo.model.report.ReportModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

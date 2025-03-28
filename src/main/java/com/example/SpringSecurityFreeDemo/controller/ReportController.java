@@ -1,11 +1,9 @@
 package com.example.SpringSecurityFreeDemo.controller;
 
 import com.example.SpringSecurityFreeDemo.dto.report.CreateReportDto;
-import com.example.SpringSecurityFreeDemo.model.ReportModel;
+import com.example.SpringSecurityFreeDemo.model.report.ReportModel;
 import com.example.SpringSecurityFreeDemo.service.ReportService;
 import com.example.SpringSecurityFreeDemo.service.auth.JwtService;
-import com.example.SpringSecurityFreeDemo.service.user.MyUserDetailsService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

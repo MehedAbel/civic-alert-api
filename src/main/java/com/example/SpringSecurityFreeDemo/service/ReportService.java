@@ -2,7 +2,7 @@ package com.example.SpringSecurityFreeDemo.service;
 
 import com.example.SpringSecurityFreeDemo.dto.report.CreateReportDto;
 import com.example.SpringSecurityFreeDemo.exception.auth.ReportNotFoundException;
-import com.example.SpringSecurityFreeDemo.model.ReportModel;
+import com.example.SpringSecurityFreeDemo.model.report.ReportModel;
 import com.example.SpringSecurityFreeDemo.model.user.AppUser;
 import com.example.SpringSecurityFreeDemo.repository.ReportRepository;
 import com.example.SpringSecurityFreeDemo.repository.UserRepository;

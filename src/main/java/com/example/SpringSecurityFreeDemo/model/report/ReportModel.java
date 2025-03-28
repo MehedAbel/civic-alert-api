@@ -1,8 +1,9 @@
-package com.example.SpringSecurityFreeDemo.model;
+package com.example.SpringSecurityFreeDemo.model.report;
 
 import com.example.SpringSecurityFreeDemo.model.user.AppUser;
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.Pair;
+
+import java.util.Date;
 
 @Entity
 public class ReportModel {
@@ -14,6 +15,10 @@ public class ReportModel {
     private String category;
     private Double latitude;
     private Double longitude;
+    private Date createdAt = new Date();
+
+    @Enumerated(EnumType.STRING)
+    private ReportStatus status = ReportStatus.OPEN;
 
     @ManyToOne
     @JoinColumn(name="user_id")
@@ -22,13 +27,15 @@ public class ReportModel {
     public ReportModel() {
     }
 
-    public ReportModel(Integer id, String title, String description, String category, Double latitude, Double longitude, AppUser user) {
+    public ReportModel(Integer id, String title, String description, String category, Double latitude, Double longitude, Date createdAt, ReportStatus status, AppUser user) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.category = category;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.createdAt = createdAt;
+        this.status = status;
         this.user = user;
     }
 
@@ -80,6 +87,14 @@ public class ReportModel {
         this.longitude = longitude;
     }
 
+    public ReportStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReportStatus status) {
+        this.status = status;
+    }
+
     public AppUser getUser() {
         return user;
     }
@@ -97,7 +112,16 @@ public class ReportModel {
                 ", category='" + category + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
+                ", status=" + status +
                 ", user=" + user +
                 '}';
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }
