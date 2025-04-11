@@ -1,15 +1,18 @@
 package com.example.SpringSecurityFreeDemo.service;
 
 import com.example.SpringSecurityFreeDemo.dto.report.CreateReportDto;
+import com.example.SpringSecurityFreeDemo.dto.report.ReportDto;
 import com.example.SpringSecurityFreeDemo.exception.auth.ReportNotFoundException;
 import com.example.SpringSecurityFreeDemo.model.report.ReportModel;
 import com.example.SpringSecurityFreeDemo.model.user.AppUser;
 import com.example.SpringSecurityFreeDemo.repository.ReportRepository;
 import com.example.SpringSecurityFreeDemo.repository.UserRepository;
+import jakarta.servlet.Servlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,6 +22,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -74,7 +78,7 @@ public class ReportService {
         reportModel.setCategory(createReportDto.getCategory());
         reportModel.setLatitude(createReportDto.getLatitude());
         reportModel.setLongitude(createReportDto.getLongitude());
-        reportModel.setCreatedAt(java.util.Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        reportModel.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         reportModel.setUser(user);
 
         return reportModel;
@@ -88,8 +92,35 @@ public class ReportService {
         return reportRepository.findById(reportId).orElseThrow(() -> new RuntimeException("Report not found"));
     }
 
-    public List<ReportModel> getAllReports() {
-        return reportRepository.findAll();
+    public List<ReportDto> getAllReports() {
+        List<ReportModel> reportModels = new ArrayList<>(reportRepository.findAll());
+        List<ReportDto> reportDtos = new ArrayList<>(List.of());
+
+        for (ReportModel reportModel : reportModels) {
+            reportDtos.add(mapReportToReportDto(reportModel));
+        }
+
+        return reportDtos;
+    }
+
+    private ReportDto mapReportToReportDto(ReportModel reportModel) {
+        ReportDto reportDto = new ReportDto();
+        reportDto.setId(reportModel.getId());
+        reportDto.setTitle(reportModel.getTitle());
+        reportDto.setDescription(reportModel.getDescription());
+        reportDto.setCategory(reportModel.getCategory());
+        reportDto.setLatitude(reportModel.getLatitude());
+        reportDto.setLongitude(reportModel.getLongitude());
+        reportDto.setCreatedAt(reportModel.getCreatedAt());
+        reportDto.setStatus(reportModel.getStatus());
+        reportDto.setUsername(reportModel.getUser().getUsername());
+
+        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        List<String> fullImageUrls = reportModel.getImagePaths().stream().map(path -> baseUrl + "/uploads/" + Paths.get(path).getFileName().toString()).collect(Collectors.toList());
+
+        reportDto.setImageUrls(fullImageUrls);
+
+        return reportDto;
     }
 
     public List<ReportModel> getAllReportsByUsername(String username) {

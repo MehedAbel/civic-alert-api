@@ -1,6 +1,7 @@
 package com.example.SpringSecurityFreeDemo.controller;
 
 import com.example.SpringSecurityFreeDemo.dto.report.CreateReportDto;
+import com.example.SpringSecurityFreeDemo.dto.report.ReportDto;
 import com.example.SpringSecurityFreeDemo.model.report.ReportModel;
 import com.example.SpringSecurityFreeDemo.service.ReportService;
 import com.example.SpringSecurityFreeDemo.service.auth.JwtService;
@@ -46,7 +47,7 @@ public class ReportController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ReportModel>> getAllReports() {
+    public ResponseEntity<List<ReportDto>> getAllReports() {
         return new ResponseEntity<>(reportService.getAllReports(), HttpStatus.OK);
     }
 
