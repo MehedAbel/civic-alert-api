@@ -52,12 +52,12 @@ public class ReportController {
     }
 
     @GetMapping("/all-by-username/{username}")
-    public ResponseEntity<List<ReportModel>> getAllReportsByUsername(@PathVariable String username) {
+    public ResponseEntity<List<ReportDto>> getAllReportsByUsername(@PathVariable String username) {
         return new ResponseEntity<>(reportService.getAllReportsByUsername(username), HttpStatus.OK);
     }
 
     @GetMapping("/all-by-category/{category}")
-    public ResponseEntity<List<ReportModel>> getAllReportsByCategory(@PathVariable String category) {
+    public ResponseEntity<List<ReportDto>> getAllReportsByCategory(@PathVariable String category) {
         return new ResponseEntity<>(reportService.getAllReportsByCategory(category), HttpStatus.OK);
     }
 

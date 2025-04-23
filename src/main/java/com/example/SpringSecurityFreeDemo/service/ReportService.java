@@ -103,6 +103,28 @@ public class ReportService {
         return reportDtos;
     }
 
+    public List<ReportDto> getAllReportsByUsername(String username) {
+        List<ReportModel> reportModels = new ArrayList<>(reportRepository.findAll().stream().filter(r -> r.getUser().getUsername().equals(username)).collect(Collectors.toList()));
+        List<ReportDto> reportDtos = new ArrayList<>(List.of());
+
+        for (ReportModel reportModel : reportModels) {
+            reportDtos.add(mapReportToReportDto(reportModel));
+        }
+
+        return reportDtos;
+    }
+
+    public List<ReportDto> getAllReportsByCategory(String category) {
+        List<ReportModel> reportModels = new ArrayList<>(reportRepository.findAll().stream().filter(r -> r.getCategory().equals(category)).collect(Collectors.toList()));
+        List<ReportDto> reportDtos = new ArrayList<>(List.of());
+
+        for (ReportModel reportModel : reportModels) {
+            reportDtos.add(mapReportToReportDto(reportModel));
+        }
+
+        return reportDtos;
+    }
+
     private ReportDto mapReportToReportDto(ReportModel reportModel) {
         ReportDto reportDto = new ReportDto();
         reportDto.setId(reportModel.getId());
@@ -121,14 +143,6 @@ public class ReportService {
         reportDto.setImageUrls(fullImageUrls);
 
         return reportDto;
-    }
-
-    public List<ReportModel> getAllReportsByUsername(String username) {
-        return reportRepository.findAll().stream().filter(r -> r.getUser().getUsername().equals(username)).collect(Collectors.toList());
-    }
-
-    public List<ReportModel> getAllReportsByCategory(String category) {
-        return reportRepository.findAll().stream().filter(r -> r.getCategory().equals(category)).collect(Collectors.toList());
     }
 
     public String deleteReport(Integer reportId) {
