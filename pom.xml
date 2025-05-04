@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>SpringSecurityFreeDemo</artifactId>
+	<artifactId>CivicAlert</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SpringSecurityFreeDemo</name>
-	<description>Spring Security Demo</description>
+	<name>CivicAlert</name>
+	<description>Civic Alert</description>
 	<url/>
 	<licenses>
 		<license/>
