@@ -1,6 +1,6 @@
 spring:
   application:
-    name: SpringSecurityFreeDemo
+    name: CivicAlert
   security:
     user:
       name: ronald
