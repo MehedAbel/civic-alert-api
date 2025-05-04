@@ -3,12 +3,12 @@ spring:
     name: SpringSecurityFreeDemo
   security:
     user:
-      name: abel
+      name: ronald
       password: pass
   datasource:
-    url: jdbc:postgresql://localhost:5432/security_free_demo
+    url: jdbc:postgresql://localhost:5432/civic_alert
     username: postgres
-    password: 9041
+    password: 0000
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -20,7 +20,3 @@ spring:
 
 upload:
   path: ./uploads
-
-#spring.application.name=SpringSecurityFreeDemo
-#spring.security.user.name=abel
-#spring.security.user.password=pass
