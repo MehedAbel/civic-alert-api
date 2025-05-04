@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>CivicAlert</artifactId>
+	<artifactId>civic-alert-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>CivicAlert</name>
 	<description>Civic Alert</description>
